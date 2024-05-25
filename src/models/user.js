@@ -1,31 +1,41 @@
-var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+const { DataTypes } = require('sequelize');
+const sequelize = require('../../db');
 
-var userSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, 'name not provided '],
-  },
-  email: {
-    type: String,
-    unique: [true, 'email already exists in database!'],
-    lowercase: true,
-    trim: true,
-    required: [true, 'email not provided'],
-    validate: {
-      validator: function (v) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+// Define the User model
+const User = sequelize.define(
+  'User',
+  {
+    // Define attributes
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: {
+          msg: 'Invalid email address',
+        },
       },
-      message: '{VALUE} is not a valid email!',
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.ENUM,
+      values: ['admin', 'user', 'organizer'],
+      allowNull: false,
     },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  preferences: {
-    type: Object,
-  },
-});
+  {
+    tableName: 'users',
+  }
+);
 
-module.exports = mongoose.model('User', userSchema);
+// Export the model
+module.exports = User;
