@@ -65,7 +65,47 @@ const validateRegisterPayload = function (user) {
   }
 };
 
-const validateEventCreationPayload = function (event) {};
+const validateEventCreationPayload = function (event) {
+  if (
+    event.hasOwnProperty('eventName') &&
+    event.hasOwnProperty('date') &&
+    event.hasOwnProperty('description')
+  ) {
+    if (event.eventName.trim() === '') {
+      return {
+        status: false,
+        message: 'Event info is malformed, please provide eventName',
+      };
+    }
+    if (event.description.trim() === '') {
+      return {
+        status: false,
+        message: 'Event info is malformed, please provide description',
+      };
+    }
+    if (event.date) {
+      const date = new Date(event.date);
+      const isDateValid = date instanceof Date && !isNaN(date);
+      if (!isDateValid) {
+        return {
+          status: false,
+          message: 'Event info is malformed, please provide valid date',
+        };
+      }
+    }
+
+    return {
+      status: true,
+      message: 'Validated successfully',
+    };
+  } else {
+    return {
+      status: false,
+      message:
+        'Event info is malformed, please provide eventName, description and date',
+    };
+  }
+};
 
 module.exports = {
   validateLoginPayload,

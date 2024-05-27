@@ -10,15 +10,14 @@ const verifyToken = (req, res, next) => {
         : req.headers.authorization;
     jwt.verify(token, process.env.SECRET, function (err, decoded) {
       if (err) {
-        req.user = undefined;
-        req.message = 'Header verification failed';
         res
           .status(401)
           .send('User is not Authenticated to perform the operation');
       } else {
         req['options'] = {
           email: decoded.email,
-          preferences: decoded.preferences,
+          userId: decoded.id,
+          role: decoded.role,
         };
         next();
       }

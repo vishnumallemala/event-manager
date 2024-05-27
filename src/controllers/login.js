@@ -4,8 +4,8 @@ const User = require('../models/user');
 const { validateLoginPayload } = require('../helpers/validator');
 const jwt_secret = process.env.SECRET;
 
-const login = {
-  v1: (req, res) => {
+const login = (req, res) => {
+  try {
     const { email, password } = req.body;
     const isPayloadValid = validateLoginPayload(req.body);
     if (!isPayloadValid.status) {
@@ -49,7 +49,9 @@ const login = {
         });
       }
     });
-  },
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
 };
 
 module.exports = login;

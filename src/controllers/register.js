@@ -2,8 +2,8 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const { validateRegisterPayload } = require('../helpers/validator');
 
-const register = {
-  v1: (req, res) => {
+const register = (req, res) => {
+  try {
     const isPayloadValid = validateRegisterPayload(req.body);
     if (!isPayloadValid.status) {
       return res.status(400).json({ message: isPayloadValid.message });
@@ -18,9 +18,11 @@ const register = {
         res.status(201).send(data);
       })
       .catch((err) => {
-        res.status(500).json({ error: err });
+        res.status(400).json({ error: err });
       });
-  },
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
 };
 
 module.exports = register;
