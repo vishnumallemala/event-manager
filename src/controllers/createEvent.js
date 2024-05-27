@@ -4,7 +4,7 @@ const { validateEventCreationPayload } = require('../helpers/validator');
 const createEvent = (req, res) => {
   try {
     if (!(req.options.role === 'admin' || req.options.role === 'organizer')) {
-      res.status(401).json({
+      res.status(403).json({
         message:
           'Unauthorized to perform the action. Please contact administrator',
       });

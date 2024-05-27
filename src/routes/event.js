@@ -9,7 +9,7 @@ const deleteEvent = require('../controllers/deleteEvent');
 event.get('/', validateToken, fetchEvent);
 event.post('/', validateToken, createEvent);
 event.put('/:id', validateToken, updateEvent);
-event.delete('/', validateToken, deleteEvent);
+event.delete('/:id', validateToken, deleteEvent);
 event.post('/:id/register', validateToken, (req, res) => {});
 
 module.exports = event;

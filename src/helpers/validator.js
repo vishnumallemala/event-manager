@@ -107,8 +107,34 @@ const validateEventCreationPayload = function (event) {
   }
 };
 
+const validateEventUpdatePayload = function (event) {
+  if (event) {
+    if (event.date) {
+      const date = new Date(event.date);
+      const isDateValid = date instanceof Date && !isNaN(date);
+      if (!isDateValid) {
+        return {
+          status: false,
+          message: 'Event info is malformed, please provide valid date',
+        };
+      }
+    }
+
+    return {
+      status: true,
+      message: 'Validated successfully',
+    };
+  } else {
+    return {
+      status: false,
+      message: 'Event info malformed. Reuired details are not present',
+    };
+  }
+};
+
 module.exports = {
   validateLoginPayload,
   validateRegisterPayload,
   validateEventCreationPayload,
+  validateEventUpdatePayload,
 };
